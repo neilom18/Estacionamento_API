@@ -39,7 +39,6 @@ namespace Estacionamento_API.Entidades
         public string Placa { get;private set; }
         public decimal? ValorEstadia { get; private set; }
         public Cliente Cliente { get;private set; }
-        public bool Pago { get; private set; } = true;
 
         public void CalcularPreço()
         {
@@ -51,9 +50,9 @@ namespace Estacionamento_API.Entidades
                     {
                         if (Carro.Lavagem)
                         {
-                            ValorEstadia = TempoPermanencia.Days + 1;
+                            ValorEstadia = (decimal.Round(TempoPermanencia.Days + 1)) * 65;
                         }
-                        ValorEstadia = 65m;
+                        ValorEstadia = (decimal.Round(TempoPermanencia.Days + 1)) * 60;
                     }
                     else if(TempoPermanencia.TotalMinutes <= 15)
                     {
@@ -61,7 +60,9 @@ namespace Estacionamento_API.Entidades
                     }
                     else if(TempoPermanencia.TotalMinutes > 15)
                     {
-                        ValorEstadia = ((decimal)TempoPermanencia.TotalHours) * 10;
+                        decimal valor = (decimal)TempoPermanencia.TotalHours * 10;
+                        decimal.Round(valor, 2);
+                        ValorEstadia = valor;
                     }
                     break;
 
@@ -69,7 +70,7 @@ namespace Estacionamento_API.Entidades
                     TempoPermanencia = DateTime.Now - Entrada;
                     if (Moto.Diaria == true)
                     {
-                        ValorEstadia = TempoPermanencia.Days + 1;
+                        ValorEstadia = (TempoPermanencia.Days + 1) * 60;
                     }
                     else if (TempoPermanencia.TotalMinutes <= 15)
                     {
@@ -77,15 +78,16 @@ namespace Estacionamento_API.Entidades
                     }
                     else if (TempoPermanencia.TotalMinutes > 15)
                     {
-                        ValorEstadia = ((decimal)TempoPermanencia.TotalHours) * 5;
+                        decimal valor = (decimal)TempoPermanencia.TotalHours * 5;
+                        decimal.Round(valor, 2);
+                        ValorEstadia = valor;
                     }
                     break;
             }
         }
-        public void SetSaida()
+        internal void SetSaida()
         {
-            if(Pago)
-                Saida = DateTime.Now;
+            Saida = DateTime.Now;
         }
     }
 }

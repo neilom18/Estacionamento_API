@@ -26,17 +26,24 @@ namespace Estacionamento_API.Controllers
             return Ok(_clienteService.Get(id));
         }
         [HttpPut]
-        public IActionResult Put(ClienteDTO clienteDTO) 
+        public IActionResult Put(ClienteDTO clienteDTO)
         {
             var cliente = new Cliente(
                 clienteDTO.Nome, clienteDTO.Documento);
-
-            return Ok(_clienteService.Adicionar(cliente));
+            try
+            {
+                return Ok(_clienteService.Adicionar(cliente));
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);  
+            }
         }
-/*        [HttpDelete, Route("{id}")]
+        [HttpDelete, Route("{id}")]
         public IActionResult Delete(Guid id)
         {
-
-        }*/
+            _clienteService.Deletar(id);
+            return NoContent();
+        }
     }
 }

@@ -8,10 +8,11 @@ namespace Estacionamento_API.Services
     public class ClienteService
     {
         private readonly List<Cliente> _clientes;
-
-        public ClienteService()
+        private readonly VeiculosService _veiculosService;
+        public ClienteService(VeiculosService veiculosService)
         {
             _clientes = new List<Cliente>();
+            _veiculosService = veiculosService;
         }
 
         public IEnumerable<Cliente> Get()
@@ -42,7 +43,14 @@ namespace Estacionamento_API.Services
         }
         public void Deletar(Guid id)
         {
-
+            try
+            {
+                _veiculosService.Deletar(id);
+                _clientes.Remove(Get(id));
+            }catch (Exception)
+            {
+                throw new Exception("Não foi possivel remover o cliente/veiculo");
+            }
         }
     }
 }
