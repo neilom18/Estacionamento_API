@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,11 @@ namespace Estacionamento_API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<VeiculosService>();
+            services.AddSingleton<ClienteService>();
+
+            services.AddMvc()
+               .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+               .AddNewtonsoftJson(c => c.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

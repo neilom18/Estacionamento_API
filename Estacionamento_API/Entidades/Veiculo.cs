@@ -24,6 +24,11 @@ namespace Estacionamento_API.Entidades
             Entrada = entrada;
             Cliente = cliente;
         }
+        public Veiculo(ETipoVeiculo tipoVeiculo, string placa)
+        {
+            TipoVeiculo = tipoVeiculo;
+            Placa = placa;
+        }
         public Guid Id { get;private set; }
         public ETipoVeiculo TipoVeiculo { get; private set; }
         public Carro? Carro { get; private set; }
@@ -76,7 +81,6 @@ namespace Estacionamento_API.Entidades
                     }
                     break;
             }
-            throw new Exception("Não foi possível calcular o valor!");
         }
         public void SetSaida()
         {

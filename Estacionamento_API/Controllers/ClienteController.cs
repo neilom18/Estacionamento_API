@@ -1,4 +1,6 @@
-﻿using Estacionamento_API.Services;
+﻿using Estacionamento_API.DTOs;
+using Estacionamento_API.Entidades;
+using Estacionamento_API.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -23,5 +25,18 @@ namespace Estacionamento_API.Controllers
         {
             return Ok(_clienteService.Get(id));
         }
+        [HttpPut]
+        public IActionResult Put(ClienteDTO clienteDTO) 
+        {
+            var cliente = new Cliente(
+                clienteDTO.Nome, clienteDTO.Documento);
+
+            return Ok(_clienteService.Adicionar(cliente));
+        }
+/*        [HttpDelete, Route("{id}")]
+        public IActionResult Delete(Guid id)
+        {
+
+        }*/
     }
 }

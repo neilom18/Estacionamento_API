@@ -17,5 +17,10 @@ namespace Estacionamento_API.Entidades
         public string Nome { get;private set; }
         public string Documento { get;private set; }
         public List<Veiculo> Veiculos { get;private set; }
+
+        public void AddVeiculo(Veiculo veiculo)
+        {
+            Veiculos.Add(veiculo);
+        }
     }
 }

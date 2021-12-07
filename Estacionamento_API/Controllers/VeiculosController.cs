@@ -30,45 +30,41 @@ namespace Estacionamento_API.Controllers
         [HttpPost]
         public IActionResult Post(VeiculoDTO veiculoDTO)
         {
-            if (veiculoDTO.Cliente.Valido)
+            veiculoDTO.Validar();
+            var c = _clienteService.Get(veiculoDTO.Cliente.Documento);
+            if (veiculoDTO == null || !veiculoDTO.Valido) return BadRequest();
+            switch (veiculoDTO.TipoVeiculo)
             {
-                var c = _clienteService.Get(veiculoDTO.Cliente.Documento);
-                if (veiculoDTO == null) return BadRequest();
-                switch (veiculoDTO.TipoVeiculo)
-                {
-                    case ETipoVeiculo.Carro:
-                        veiculoDTO.Carro.Validar();
-                        if (c is null) 
-                        {
-                            c = new Cliente(veiculoDTO.Cliente.Nome, veiculoDTO.Cliente.Documento);
-                        }
-                        if (veiculoDTO.Carro.Valido)
-                        {
-                            var carro = new Veiculo(veiculoDTO.TipoVeiculo,
-                                carro: new Carro(
-                                largura: veiculoDTO.Carro.Largura,
-                                placa: veiculoDTO.Carro.Placa,
-                                diaria: veiculoDTO.Carro.Diaria,
-                                lavagem: veiculoDTO.Carro.Lavagem),
-                                entrada: veiculoDTO.Carro.Entrada,
-                                cliente: c);
-                            return Ok(_veiculosService.Adicionar(carro));
-                        }
-                        break;
-                    case ETipoVeiculo.Moto:
-                        veiculoDTO.Moto.Validar();
-                        if (veiculoDTO.Moto.Valido)
-                        {
-                            var carro = new Veiculo(veiculoDTO.TipoVeiculo,
-                                moto: new Moto(
-                                largura: veiculoDTO.Moto.Largura,
-                                placa: veiculoDTO.Moto.Placa),
-                                entrada: veiculoDTO.Moto.Entrada,
-                                cliente: c);
-                            return Ok(_veiculosService.Adicionar(carro));
-                        }
-                        break;
-                }
+                case ETipoVeiculo.Carro:
+                    if (c is null)
+                    {
+                        c = new Cliente(veiculoDTO.Cliente.Nome, veiculoDTO.Cliente.Documento);
+                        _clienteService.Adicionar(c);
+                    }
+                    var carro = new Veiculo(veiculoDTO.TipoVeiculo,
+                        carro: new Carro(
+                        largura: veiculoDTO.Carro.Largura,
+                        placa: veiculoDTO.Carro.Placa,
+                        diaria: veiculoDTO.Carro.Diaria,
+                        lavagem: veiculoDTO.Carro.Lavagem),
+                        entrada: veiculoDTO.Carro.Entrada,
+                        cliente: c);
+                    _clienteService.AdicionarVeiculo(carro);
+                    return Ok(_veiculosService.Adicionar(carro));
+                case ETipoVeiculo.Moto:
+                    if (c is null)
+                    {
+                        c = new Cliente(veiculoDTO.Cliente.Nome, veiculoDTO.Cliente.Documento);
+                        _clienteService.Adicionar(c);
+                    }
+                    var moto = new Veiculo(veiculoDTO.TipoVeiculo,
+                        moto: new Moto(
+                        largura: veiculoDTO.Moto.Largura,
+                        placa: veiculoDTO.Moto.Placa),
+                        entrada: veiculoDTO.Moto.Entrada,
+                        cliente: c);
+                    _clienteService.AdicionarVeiculo(moto);
+                    return Ok(_veiculosService.Adicionar(moto));
             }
             return BadRequest();
         }

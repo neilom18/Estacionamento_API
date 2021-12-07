@@ -27,7 +27,7 @@ namespace Estacionamento_API.Services
             if (_veiculos.Where(v => v.Placa == veiculo.Placa).FirstOrDefault() != null)
                 throw new Exception("Um veiculo com essa placa já esta estacionado");
             _veiculos.Add(veiculo);
-            return veiculo;
+            return Get(veiculo.Id);
         }
         public void RetirarVeiculo(string placa)
         {

@@ -15,6 +15,7 @@ namespace Estacionamento_API.DTOs
             var t = DateTime.Compare(DateTime.Now, Entrada);
             if (t < 0 || t == 0)
                 Valido = false;
+            if (Largura == 0) Valido = false;
         }
     }
 }

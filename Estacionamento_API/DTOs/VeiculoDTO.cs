@@ -11,11 +11,23 @@ namespace Estacionamento_API.DTOs
 
         public override void Validar()
         {
+            Valido = true;
             Cliente.Validar();
             if (Cliente.Valido)
             {
+                switch (TipoVeiculo)
+                {
+                    case ETipoVeiculo.Carro:
+                        Carro.Validar();
+                        if(!Carro.Valido) Valido = false;
+                        break;
 
-            }
+                    case ETipoVeiculo.Moto:
+                        Moto.Validar();
+                        if (!Moto.Valido) Valido = false;
+                        break;
+                }
+            }else Valido = false;
         }
     }
 }

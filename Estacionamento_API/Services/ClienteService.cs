@@ -28,8 +28,21 @@ namespace Estacionamento_API.Services
         }
         public Cliente Adicionar(Cliente cliente)
         {
+            if (Get(cliente.Documento) != null)
+                throw new Exception("Cliente já cadastrado!");
             _clientes.Add(cliente);
             return cliente;
+        }
+        public void AdicionarVeiculo(Veiculo veiculo)
+        {
+            var cliente = _clientes.Where(x => x.Documento == veiculo.Cliente.Documento).FirstOrDefault();
+            var v = cliente.Veiculos.Where(d => d.Placa == veiculo.Placa).FirstOrDefault();
+            if (v == null)
+                veiculo.Cliente.AddVeiculo(veiculo);
+        }
+        public void Deletar(Guid id)
+        {
+
         }
     }
 }
